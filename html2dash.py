@@ -26,7 +26,7 @@ def update_db(name, path):
 
 
 def add_urls():
-    index_page = open(os.path.join(docset_path, 'index.html')).read()
+    index_page = open(os.path.join(docset_path, 'index.html'), encoding='utf-8').read()
     soup = BeautifulSoup(index_page, "html.parser")
     any = re.compile('.*')
     for tag in soup.find_all('a', {'href': any}):
@@ -64,9 +64,9 @@ def add_infoplist(info_path, index_page):
 
     try:
         open(info_path, 'wb').write(info)
-        print "Create the Info.plist File"
+        print("Create the Info.plist File")
     except:
-        print "**Error**:  Create the Info.plist File Failed..."
+        print("**Error**:  Create the Info.plist File Failed...")
         clear_trash()
         exit(2)
 
@@ -74,9 +74,9 @@ def add_infoplist(info_path, index_page):
 def clear_trash():
     try:
         subprocess.call(["rm", "-r", docset_name])
-        print "Clear generated useless files!"
+        print("Clear generated useless files!")
     except:
-        print "**Error**:  Clear trash failed..."
+        print("**Error**:  Clear trash failed...")
 
 
 if __name__ == "__main__":
@@ -104,7 +104,7 @@ if __name__ == "__main__":
         source_dir = results.SOURCE[:-1]
 
     if not os.path.exists(source_dir):
-        print source_dir + " does not exsit!"
+        print(source_dir + " does not exsit!")
         exit(2)
 
     dir_name = os.path.basename(source_dir)
@@ -131,17 +131,17 @@ if __name__ == "__main__":
 
     if not os.path.exists(docset_path):
         os.makedirs(docset_path)
-        print "Create the Docset Folder!"
+        print("Create the Docset Folder!")
     else:
-        print "Docset Folder already exist!"
+        print("Docset Folder already exist!")
 
     # Copy the HTML Documentation to the Docset Folder
     try:
         arg_list = ["cp", "-r"] + [source_dir + "/" + f for f in os.listdir(source_dir)] + [docset_path]
         subprocess.call(arg_list)
-        print "Copy the HTML Documentation!"
+        print("Copy the HTML Documentation!")
     except:
-        print "**Error**:  Copy Html Documents Failed..."
+        print("**Error**:  Copy Html Documents Failed...")
         clear_trash()
         exit(2)
 
@@ -150,7 +150,7 @@ if __name__ == "__main__":
         db = sqlite3.connect(sqlite_path)
         cur = db.cursor()
     except:
-        print "**Error**:  Create SQLite Index Failed..."
+        print("**Error**:  Create SQLite Index Failed...")
         clear_trash()
         exit(2)
 
@@ -164,7 +164,7 @@ if __name__ == "__main__":
                 type TEXT,\
                 path TEXT);')
     cur.execute('CREATE UNIQUE INDEX anchor ON searchIndex (name, type, path);')
-    print "Create the SQLite Index"
+    print("Create the SQLite Index")
 
     add_urls()
     db.commit()
@@ -184,16 +184,16 @@ if __name__ == "__main__":
         if icon_filename[-4:] == ".png" and os.path.isfile(icon_filename):
             try:
                 subprocess.call(["cp", icon_filename, icon_path])
-                print "Create the Icon for the Docset!"
+                print("Create the Icon for the Docset!")
             except:
-                print "**Error**:  Copy Icon file failed..."
+                print("**Error**:  Copy Icon file failed...")
                 clear_trash()
                 exit(2)
         else:
-            print "**Error**:  Icon file should be a valid PNG image..."
+            print("**Error**:  Icon file should be a valid PNG image...")
             clear_trash()
             exit(2)
     else:
         pass
 
-    print "Generate Docset Successfully!"
+    print("Generate Docset Successfully!")
