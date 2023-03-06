@@ -39,6 +39,8 @@ def add_urls():
 
 def add_infoplist(info_path, index_page):
     name = docset_name.split('.')[0]
+    print(name)
+    print(index_page)
     info = """
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -63,11 +65,15 @@ def add_infoplist(info_path, index_page):
     """.format(name, name, name, index_page)
 
     try:
-        open(info_path, 'wb').write(info)
+        print(info_path)
+        print(info)
         print("Create the Info.plist File")
+        f = open(info_path, 'wb')
+        f.write(info.encode())
+        f.close()
     except:
         print("**Error**:  Create the Info.plist File Failed...")
-        clear_trash()
+        #clear_trash()
         exit(2)
 
 
@@ -136,13 +142,17 @@ if __name__ == "__main__":
         print("Docset Folder already exist!")
 
     # Copy the HTML Documentation to the Docset Folder
+    print(source_dir)
+    print(docset_path)
     try:
-        arg_list = ["cp", "-r"] + [source_dir + "/" + f for f in os.listdir(source_dir)] + [docset_path]
-        subprocess.call(arg_list)
+        #arg_list = ["cp", "-r"] + [source_dir + "/" + f for f in os.listdir(source_dir)] + [docset_path]
+        arg_list = ["cp", "-r"] + [source_dir + "/*"] + [docset_path]
+        print('%s\n'%arg_list)
+        #subprocess.call(arg_list)
         print("Copy the HTML Documentation!")
     except:
         print("**Error**:  Copy Html Documents Failed...")
-        clear_trash()
+        #clear_trash()
         exit(2)
 
     # create and connect to SQLite
