@@ -148,11 +148,11 @@ if __name__ == "__main__":
         #arg_list = ["cp", "-r"] + [source_dir + "/" + f for f in os.listdir(source_dir)] + [docset_path]
         arg_list = ["cp", "-r"] + [source_dir + "/*"] + [docset_path]
         print('%s\n'%arg_list)
-        #subprocess.call(arg_list)
+        subprocess.call(arg_list)
         print("Copy the HTML Documentation!")
     except:
         print("**Error**:  Copy Html Documents Failed...")
-        #clear_trash()
+        clear_trash()
         exit(2)
 
     # create and connect to SQLite
